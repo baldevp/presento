@@ -1,0 +1,10 @@
+	#login_outer{
+		background-color:#6AB7EE;
+		height: 100%;
+
+	}
+	#login_inner{
+		background-color:#FFFFFF;
+		margin-top: 10%;
+		border-radius:3px; 
+	}
