@@ -29,6 +29,9 @@
 				    <input type="email" class="form-control" placeholder="Email" name="email" required >
                </div>
                <div class="form-group">
+               		<input type="number" class="form-control" placeholder="Contact Number" name="contact" required >	
+               </div>
+               <div class="form-group">
                		<input type="password" class="form-control" placeholder="Password" name="pass" id="pass" required >	
                </div>
                <div class="form-group">
@@ -40,6 +43,9 @@
                     </div>
 					<div class="form-group">
 						<input type="number" class="form-control" placeholder="CPI" min="0.00" max="10.00" name="cpi" step="0.01" required >
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Section" name="section" required >
 					</div>
 				</fieldset>
                <button type="submit" id="btn" name="submit" class="btn btn-primary">Register</button>

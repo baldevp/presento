@@ -16,3 +16,19 @@
 	.visible{
 		display: block;
 	}
+	.container{
+		background-color: #FFFFFF;
+		height: 100%;
+	}
+	.content{
+		padding-top: 60px;
+	}
+	.atten{
+		border-right: solid 1px; 
+	}
+	#for{
+		display: inline;
+	}
+	.marks{
+		border-radius: 3px;
+	}
