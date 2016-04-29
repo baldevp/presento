@@ -31,9 +31,12 @@
        					<?php } else if(!isset($_COOKIE['user_type'])){
        						echo '';
        					    }
-       						else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
+       						else if(isset($_COOKIE['user_type'])&&($_COOKIE['user_type']==1 || $_COOKIE['user_type']==2)){
        						?>
 				        <li><a href="attendence.php">Attendence</a></li>
+				        <?php if($_COOKIE['user_type']!=2){ ?>
+				        <li><a href="complain.php">Complaint</a></li>
+				        <?php } ?>
 				        <li><a href="tasks.php">Task</a></li>
 				        <li><a href="logout.php">Log Out</a></li>
 				        <?php

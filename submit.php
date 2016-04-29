@@ -11,11 +11,20 @@
         $name= $task_id.'_'.rand().'.'.$ext;
         $path=$loc.$name;
         if(move_uploaded_file($_FILES['file']['tmp_name'], $path)){
-        	$query="insert into presento_submission(task_id, file_name) values('$task_id','$name')";
+        	$query="select file_name from presento_submission where task_id='$task_id'";
+        	$data=mysqli_query($connect,$query);
+        	while($row=mysqli_fetch_array($data)){
+        		unlink('uploads/'.$row['file_name']);
+        	}
+        	$query="delete from presento_submission where task_id='$task_id'";
+        	mysqli_query($connect,$query);
+        	$query="insert into presento_submission(task_id, file_name,submit_time) values('$task_id','$name',now())";
         	mysqli_query($connect,$query);
         	$error="Submitted file";
         }
         else{
+        	ini_set('display_errors',1);
+            error_reporting(E_ALL);
         	$error="Error uploading file";
         }
 	}

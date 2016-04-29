@@ -16,20 +16,20 @@
                          <input type="radio" name="userType" value="0" required /> Student
 							</label>
 					<label class="radio-inline">
-							  <input type="radio" name="userType" value="1" required /> Mentor
+							  <input type="radio" name="userType" value="1" required checked /> Mentor
 							</label>
 				  	<label class="radio-inline">
 							  <input type="radio" name="userType" value="2" required /> PC
 							</label>
 				</div>
 				<div class="form-group">
-               		<input type="text" class="form-control" placeholder="Name" name="name">	
+               		<input type="text" class="form-control" placeholder="Name" name="name" required>	
                </div>
 	    		<div class="form-group">
 				    <input type="email" class="form-control" placeholder="Email" name="email" required >
                </div>
                <div class="form-group">
-               		<input type="number" class="form-control" placeholder="Contact Number" name="contact" required >	
+               		<input type="number" class="form-control" placeholder="Contact Number" name="contact" max="9999999999" min="7000000000" required >	
                </div>
                <div class="form-group">
                		<input type="password" class="form-control" placeholder="Password" name="pass" id="pass" required >	

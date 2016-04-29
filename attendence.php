@@ -17,23 +17,23 @@ include_once('includes/head.php');
 		$stu=mysqli_query($connect,$query);
 		if(isset($_POST['submit'])){
 			$max=$_POST['maxMarks'];
-			$completion=$_POST['completion'];
 			$i=0;
 			while($row=mysqli_fetch_array($stu)){
-				$query="insert into presento_attendence(user_id,attendence,date) values('".$row['user_id']."','".$_POST['stuatten'.$i]."',DATE(now()))";
+				$query="insert into presento_attendence(user_id,attendence,date) values('".$row['user_id']."','".$_POST['stuatten'.$i]."',DATE('".$_POST['atten']."'))";
 				mysqli_query($connect,$query);
 				$query="insert into presento_marks(user_id,marks_aw,max_marks) values('".$row['user_id']."','".$_POST['stumark'.$i]."','$max')";
 				mysqli_query($connect,$query);
 				$i++;
 			}
-			$query="update presento_group set completion='$completion' where group_id='".$group['group_id']."'";
 			mysqli_query($connect,$query);
+			mysqli_data_seek($stu, 0);
 			$error="Updated the details";
 		}
 		?>
 		<form method="POST">
 		<?php
 		$i=0;
+		if(mysqli_num_rows($stu)>0){
 		while($row=mysqli_fetch_array($stu)){
 			?>
 			<div class="row">
@@ -60,11 +60,18 @@ include_once('includes/head.php');
 
 			</div>
 			<div class="form-group">
-				<input type="number" class="form-control" name="completion" max="75" placeholder="Preject Completed in % out of 75" value="<?php echo $group['completion'] ?>">
+				<input type="date" class="form-control" name="atten" placeholder="Date" value="<?php echo date('Y-m-d'); ?>" min="<?php $date=date('Y-m-d');$date=new DateTime($date);date_sub($date, date_interval_create_from_date_string('14 days'));
+					echo date_format($date,'Y-m-d') ?>" max="<?php echo date('Y-m-d'); ?>">
 			</div>
 			<button type="submit" id="btn" name="submit" class="btn btn-primary">Submit</button>
 		</form>
 			<?php
+		}
+		else{
+			?>
+			<p>No person in group to allot attendence to.</p>
+		<?php
+	}
 	     }
 	     else{
 		?>

@@ -41,7 +41,10 @@ else
 		<h1>Complaint</h1>
 		<?php if(isset($error)) echo '<div class="error visible">'.$error.'</div>';?>
 			<form method="POST">
+			<?php if($_COOKIE['user_type']==0){
+				?>
 				<div class="form-group">
+
 					<label class="radio-inline">
                          <input type="radio" name="to" value="0" required /> PC
 							</label>
@@ -49,6 +52,14 @@ else
 							  <input type="radio" name="to" value="1" required /> Mentor
 							</label>
 				</div>
+				<?php
+				 }
+				 else{ 
+				?>
+				<input type="hidden" name="to" value="0">
+				<?php
+			     }
+				?>
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Subject" name="subject" required>
 				</div>

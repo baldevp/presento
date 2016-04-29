@@ -32,3 +32,6 @@
 	.marks{
 		border-radius: 3px;
 	}
+	.inline{
+		display: inline;
+	}	

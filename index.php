@@ -93,32 +93,32 @@ else{
 			<hr>
 			<div class="row">
 				<div class="col-md-6 col-xs-12 atten">
-					<h3>Task Pending</h3>
+					<h3>Ongoing Tasks</h3>
 					<?php
-					$querytask="select * from presento_task where group_id='".$group['group_no']."' and task_status=0 and DATE(now())<=DATE(task_dead) order by task_id desc limit 5";
+					$querytask="select * from presento_task where group_id='".$group['group_no']."' and task_status=0 and DATE(now())<=DATE(task_dead) order by task_dead asc limit 5";
 						$task=mysqli_query($connect,$querytask);
 					if(mysqli_num_rows($task)>0){
-						echo '<ul>';
+						echo '<table class="table">';
 						while($row=mysqli_fetch_array($task)){
-							echo '<li>'.$row['task_desc'].' :   '.$row['task_dead'].'</li>';
+							echo '<tr><td>'.$row['task_desc'].'</td><td>'.$row['task_dead'].'</td></tr>';
 						}
-						echo '</ul>';
+						echo '</table>';
 					}
 					else
 						echo 'N/A';
 					?>
 				</div>
 				<div class="col-md-6 col-xs-12">
-					<h3>Task Accomplished</h3>
+					<h3>Task Delayed</h3>
 					<?php 
-					$querytask="select * from presento_task where group_id='".$group['group_no']."' and task_status=1 order by task_id desc limit 5";
+					$querytask="select * from presento_task where group_id='".$group['group_no']."' and task_status=0 and DATE(now())>DATE(task_dead) order by task_dead desc limit 5";
 					$task=mysqli_query($connect,$querytask);
 					if(mysqli_num_rows($task)>0){
-						echo '<ul>';
+						echo '<table class="table">';
 						while($row=mysqli_fetch_array($task)){
-							echo '<li>'.$row['task_desc'].'</li>';
+							echo '<tr><td>'.$row['task_desc'].'</td><td>'.$row['task_dead'].'</td></tr>';
 						}
-						echo '</ul>';
+						echo '</table>';
 					}
 					else
 						echo 'N/A';
@@ -204,20 +204,38 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 				echo 'You have not entered any project yet.' ?></p>
 	<div class="row"></div>
 	<hr>
+	<div class="col-md-6">
     <h3>Ongoing Tasks</h3>
     <?php 
-     $query="select * from presento_task where group_id='".$group['group_id']."' and task_status=0 and DATE(now())<=DATE(task_dead) order by task_dead desc limit 5";
+     $query="select * from presento_task where group_id='".$group['group_id']."' and task_status=0 and DATE(now())<=DATE(task_dead) order by task_dead asc limit 5";
      $data=mysqli_query($connect,$query);
      if(mysqli_num_rows($data)>0){
-     	echo '<ul>';
+     	echo '<table class="table"';
      	while($row=mysqli_fetch_array($data)){
-     		echo '<li>'.$row['task_desc'].'  : '.$row['task_dead'].'</li>';
+     		echo '<tr><td>'.$row['task_desc'].'</td><td>'.$row['task_dead'].'</td></tr>';
      	}
-     	echo '</ul>';
+     	echo '</table>';
      }
      else
      	echo "Your team doesn't have any task";
     ?>
+	</div>
+	<div class="col-md-6">
+	<h3>Delayed Tasks</h3>
+    <?php 
+     $query="select * from presento_task where group_id='".$group['group_id']."' and task_status=0 and DATE(now())>DATE(task_dead) order by task_dead desc limit 5";
+     $data=mysqli_query($connect,$query);
+     if(mysqli_num_rows($data)>0){
+     	echo '<table class="table"';
+     	while($row=mysqli_fetch_array($data)){
+     		echo '<tr><td>'.$row['task_desc'].'</td><td>'.$row['task_dead'].'</td></tr>';
+     	}
+     	echo '</table>';
+     }
+     else
+     	echo "Congrats!! Your team doesn't have any pending task";
+    ?>	
+	</div>
 	<div class="row"></div>
     <hr>
 	</div>
