@@ -175,7 +175,7 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 	             <div class="progress">
                   <div class="progress-bar progress-bar-striped active" role="progressbar"
                     aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $atten ?>%">
-                    <?php echo $stud[$i]['user_name'] ?>
+                    <?php echo $stud[$i]['user_name'].' : '.$atten.'%'; ?>
                    </div>
                 </div>
                 </div>
@@ -241,6 +241,63 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 	</div>
     </div>
     <?php
+}else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==2){
+	?>
+	<div id="login_outer">
+		<div class="container content">
+			<h1>Dashboard</h1>
+			<div class="col-md-6 atten">
+				<h3>Stats</h3>
+				<table class="table">
+				<tr><td>
+				Students registered</td><td><?php $query="select * from presento_user where verify=1 and user_type=0";
+				$data=mysqli_query($connect,$query);
+				echo mysqli_num_rows($data); ?>
+				</td></tr>
+				<tr>
+					<td>Mentors Registered</td>
+					<td><?php $query="select * from presento_user where verify=1 and user_type!=0";
+				$data=mysqli_query($connect,$query);
+				echo mysqli_num_rows($data); ?></td>
+				</tr>
+				<tr><td>
+				Groups Registered</td><td><?php $query="select * from presento_group";
+				$data=mysqli_query($connect,$query);
+				echo mysqli_num_rows($data);
+				?></td>
+				</tr>
+				</table>
+			</div>
+			<div class="col-md-6">
+				<h3>Tasks to do</h3>
+				<table class="table">
+					<tr>
+						<td>Unverified Users</td>
+						<td><?php $query="select * from presento_user where verify=0 and user_type=0";
+				$data=mysqli_query($connect,$query);
+				echo mysqli_num_rows($data); ?></td>
+					</tr>
+					<tr><td>Unverified Mentors</td>
+					<td><?php $query="select * from presento_user where verify=0 and user_type=1";
+				$data=mysqli_query($connect,$query);
+				echo mysqli_num_rows($data); ?></td></tr>
+						<tr>
+						<td>Unallotted groups</td>
+							<td><?php $query="select * from presento_group where project_mentor is null";
+				$data=mysqli_query($connect,$query);
+				echo mysqli_num_rows($data); ?></td>
+						</tr>
+				</table>
+			</div>
+			<div class="row"></div>
+			<hr>
+			<div class="col-md-6">
+				<h3>Ongoing Tasks</h3>
+
+			</div>
+		</div>
+	</div>
+	<?php 
 }
 include_once('includes/script.php');
 include_once('includes/footer.php');

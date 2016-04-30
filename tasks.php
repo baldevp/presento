@@ -37,6 +37,31 @@ if(isset($_POST['submit2'])){
 	$query="update presento_group set completion='".($project['completion']+$task['percent_weightage'])."' where group_id='".$task['group_id']."'";
 	mysqli_query($connect,$query);
 }
+if(isset($_POST['submit3'])){
+	$task_id=$_POST['task_id'];
+	$filename=$_POST['file'];
+	unlink('uploads/'.$filename);
+	$query="delete from presento_submission where task_id='$task_id'";
+	mysqli_query($connect,$query);
+	$from='overseer@cotanz.com';
+			$subject="Rejection Notice";
+		
+	$headers = "From: $from" . "\r\n" .
+                       "Reply-To: $from" . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+    $group_id="select group_id from presento_task where task_id='$task_id'";
+    $group_id=mysqli_query($connect,$group_id);
+    $group_id=mysqli_fetch_assoc($group_id);
+    $group_id=$group_id['group_id'];
+    $mentor="select * from presento_group join presento_user on presento_group.project_mentor=presento_user.user_id where group_id='$group_id' union select * from presento_group right join presento_user on presento_group.group_id=presento_user.group_no where group_no='$group_id'";
+    while($row=mysqli_fetch_array($mentor)){
+    	$name=$row['user_name'];
+    	$to=$row['user_email'];
+    	$message="Dear $name,<br >The submission made by your group for '".$row['task_desc']."' has been declined. Kindly resubmit it before the given deadline to avoid losing marks.";
+    	mail($to,$subject,$message,$headers);
+    }
+
+}
 ?>
 <div id="login_outer">
 	<div class="container content">
@@ -138,6 +163,8 @@ if(isset($_POST['submit2'])){
 						<td>
 						<?php if($row['submission_req']==1){ ?>
 						<form method="POST"><input type="hidden" value="<?php echo $row['task_id'];?>" name="task_id">
+						<input type="hidden" name="file" value="<?php echo 
+						$row['file_name'] ?>">
 						<button type="submit" name="submit3" class="btn btn-danger">Reject</button></form>
 						<?php } ?>
 						</td>
@@ -154,7 +181,8 @@ if(isset($_POST['submit2'])){
 			</table>
 			<?php if(isset($error1)) echo '<div class="visible">'.$error1.'</div>';?>
 			<hr>
-			<?php if($_COOKIE['user_type']==2){ ?>
+			<?php if($_COOKIE['user_type']==2){ unset($error1);	?>
+
 			<h2>Tasks-PC</h2>
 			<table class="table">
 				<?php 
