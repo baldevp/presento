@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<?php include_once('includes/checklogin.php') ?>
+		<link rel="icon" href="image/main-ico.png">
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/animate.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
