@@ -37,6 +37,10 @@
 				        <?php if($_COOKIE['user_type']!=2){ ?>
 				        <li><a href="complain.php">Complaint</a></li>
 				        <?php } ?>
+				        <?php if($_COOKIE['user_type']==2){?>
+				        <li><a href="group.php">Groups</a></li>
+				        <li><a href="verify.php">Verify</a></li>
+				        <?php } ?>
 				        <li><a href="tasks.php">Task</a></li>
 				        <li><a href="logout.php">Log Out</a></li>
 				        <?php

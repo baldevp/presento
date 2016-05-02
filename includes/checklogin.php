@@ -14,4 +14,7 @@ if(isset($user)&&($user==3)&&$_COOKIE['user_type']!=0){
 if(isset($user)&&($user==4)&&$_COOKIE['user_type']==0){
 	header('Location: index.php');
 }
+if(isset($user)&&($user==5)&&$_COOKIE['user_type']!=2){
+	header('Location: index.php');
+}
 ?>

@@ -2,8 +2,8 @@
 	$title="Submit Task";
 	$user=3; 
 	include_once('includes/head.php');
+	$connect=mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME);
 	if(isset($_POST['submit'])){
-		$connect=mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME);
 		$task_id=$_POST['task_id'];
 		$loc='uploads/';
 		$name = $_FILES["file"]["name"];
@@ -35,8 +35,7 @@
 			<?php if(isset($error)) echo '<div class="error visible">'.$error.'</div>';?>
 			<p>Please upload a single file. In case of multiple files zip the file.</p>
 			<?php
-			$query="select group_no from presento_user where user_id='".$_COOKIE['user_id']."' limit 1";
-			$connect=mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME);
+			$query="select group_no from presento_user left join presento_group on presento_group.group_id=presento_user.group_no where user_id='".$_COOKIE['user_id']."' and project_mentor is not null limit 1";
 			$data=mysqli_query($connect,$query);
 			$data=mysqli_fetch_assoc($data);
 			$query="select * from presento_task where task_status=0 and DATE(now())<=DATE(task_dead) and group_id='".$data['group_no']."' and submission_req=1";

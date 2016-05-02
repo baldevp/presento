@@ -47,6 +47,7 @@ else{
 			<div class="row">
 			<div class="col-md-6 col-xs-12 atten">
 				<h3>Attendence</h3>
+				<?php if(!is_null($project)){ ?>
 				<div class="progress">
                   <div class="progress-bar progress-bar-striped active" role="progressbar"
                     aria-valuemin="20" aria-valuemax="100" style="width:<?php echo $atten ?>%">
@@ -57,7 +58,7 @@ else{
                 <p>Classes attended: <?php echo $present ?></p>
                 <p>Leave taken: <?php echo ($total-$attend) ?></p>
                 <h3>Marks: <?php echo $marks ?>/<?php echo $totalmark ?></h3>
-
+				<?php } else echo 'You need to Join group for attendence' ?>
 			</div>
 			<div class="col-md-6 col-xs-12">
 				<h3>Team</h3>
@@ -137,6 +138,7 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 	<div id="login_outer">
 		<div class="container content">
 		 <h1>Dashboard</h1>
+		 <?php if(!is_null($group)){ ?>
 		 <h3>Attendence</h3>
 
 	<?php
@@ -237,7 +239,9 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
     ?>	
 	</div>
 	<div class="row"></div>
+	<?php } else echo 'No group has been allotted, no stats to show.'?>
     <hr>
+
 	</div>
     </div>
     <?php
@@ -252,7 +256,10 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 				<tr><td>
 				Students registered</td><td><?php $query="select * from presento_user where verify=1 and user_type=0";
 				$data=mysqli_query($connect,$query);
-				echo mysqli_num_rows($data); ?>
+				echo mysqli_num_rows($data);
+				$query="select * from presento_group where grade!=0 group by grade";
+               $grade=mysqli_query($connect,$query);
+ ?>
 				</td></tr>
 				<tr>
 					<td>Mentors Registered</td>
@@ -275,7 +282,7 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 						<td>Unverified Users</td>
 						<td><?php $query="select * from presento_user where verify=0 and user_type=0";
 				$data=mysqli_query($connect,$query);
-				echo mysqli_num_rows($data); ?></td>
+				echo mysqli_num_rows($data); $users=mysqli_num_rows($data);?></td>
 					</tr>
 					<tr><td>Unverified Mentors</td>
 					<td><?php $query="select * from presento_user where verify=0 and user_type=1";
@@ -287,14 +294,95 @@ else if(isset($_COOKIE['user_type'])&&$_COOKIE['user_type']==1){
 				$data=mysqli_query($connect,$query);
 				echo mysqli_num_rows($data); ?></td>
 						</tr>
+						<?php if ($users==0&&is_null($grade)){ ?>
+							<tr><td><a href="grade.php"><button id="btn" name="submit" class="btn btn-primary">Assign Grades</button></a></td><td></td></tr>
+						<?php } ?>
 				</table>
 			</div>
 			<div class="row"></div>
 			<hr>
-			<div class="col-md-6">
+			<div class="col-md-6 atten">
 				<h3>Ongoing Tasks</h3>
-
+				<?php $query="select count(group_id) as groups_left,task_desc,task_dead from presento_task where submit_to=0 and task_status=0 and DATE(now())<DATE(task_dead) group by added_at,task_desc";
+					$data=mysqli_query($connect,$query);
+					if(mysqli_num_rows($data)>0){
+						echo '<table class="table">';
+						echo '<tr><th>Task</th><th>Deadline</th><th>Groups Left</th></tr>';
+						while($row=mysqli_fetch_array($data)){
+						?>
+						<tr>
+							<td><?php echo $row['task_desc']; ?></td>
+							<td><?php echo $row['task_dead']; ?></td>
+							<td><?php if($row['groups_left']==0) echo 'All Completed'; else echo $row['groups_left'] ?></td>
+						</tr>
+						<?php
+						}
+						echo '</table>';
+						}
+						else echo 'No ongoing tasks'; ?>
 			</div>
+			<div class="col-md-6">
+				<h3>Delayed Tasks</h3>
+				<?php $query="select count(group_id) as groups_left,task_desc,task_dead from presento_task where submit_to=0 and task_status=0 and DATE(now())>DATE(task_dead) group by added_at,task_desc";
+					$data=mysqli_query($connect,$query);
+					if(mysqli_num_rows($data)>0){
+						echo '<table class="table">';
+						echo '<tr><th>Task</th><th>Deadline</th><th>Groups Left</th></tr>';
+						while($row=mysqli_fetch_array($data)){
+						?>
+						<tr>
+							<td><?php echo $row['task_desc']; ?></td>
+							<td><?php echo $row['task_dead']; ?></td>
+							<td><?php if($row['groups_left']==0) echo 'All Completed'; else echo $row['groups_left'] ?></td>
+						</tr>
+						<?php
+						}
+						echo '</table>';
+						}
+						else echo 'No delayed tasks'; ?>
+			</div>
+			<div class="row">
+			</div>
+			<hr>
+			<?php $query="select * from presento_group where project_mentor='".$_COOKIE['user_id']."'";
+			$group=mysqli_query($connect,$query);
+			$group=mysqli_fetch_assoc($group);
+			if(!is_null($group)){ ?>
+			<div class="col-md-6">
+    <h3>Ongoing Tasks-Group</h3>
+    <?php
+     $query="select * from presento_task where group_id='".$group['group_id']."' and task_status=0 and DATE(now())<=DATE(task_dead) order by task_dead asc limit 5";
+     $data=mysqli_query($connect,$query);
+     if(mysqli_num_rows($data)>0){
+     	echo '<table class="table"';
+     	while($row=mysqli_fetch_array($data)){
+     		echo '<tr><td>'.$row['task_desc'].'</td><td>'.$row['task_dead'].'</td></tr>';
+     	}
+     	echo '</table>';
+     }
+     else
+     	echo "Your team doesn't have any task";
+    ?>
+	</div>
+	<div class="col-md-6">
+	<h3>Delayed Tasks</h3>
+    <?php 
+     $query="select * from presento_task where group_id='".$group['group_id']."' and task_status=0 and DATE(now())>DATE(task_dead) order by task_dead desc limit 5";
+     $data=mysqli_query($connect,$query);
+     if(mysqli_num_rows($data)>0){
+     	echo '<table class="table"';
+     	while($row=mysqli_fetch_array($data)){
+     		echo '<tr><td>'.$row['task_desc'].'</td><td>'.$row['task_dead'].'</td></tr>';
+     	}
+     	echo '</table>';
+     }
+     else
+     	echo "Congrats!! Your team doesn't have any pending task";
+    ?>	
+	</div>
+	<div class="row"></div>
+    <hr>
+    <?php } ?>
 		</div>
 	</div>
 	<?php 

@@ -29,7 +29,6 @@ if(isset($_POST['submit2'])){
 	$task=mysqli_query($connect,$task);
 	$task=mysqli_fetch_assoc($task);
 	$query="update presento_task set task_status=1 where task_id='".$_POST['task_id']."'";
-	echo $query;
 	mysqli_query($connect,$query);
 	$project="select * from presento_group where group_id='".$task['group_id']."'";
 	$project=mysqli_query($connect,$project);
