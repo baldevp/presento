@@ -89,7 +89,7 @@ if(isset($_POST['submit'])){
 				<?php if($grade!=$i){ 
 					$i++; ?>
 				<select name="grade1" class="form-control" placeholder="Grade A">
-					<?php $query="select user_id,user_name from presento_user where grade=1";
+					<?php $query="select user_id,user_name from presento_user where grade=1 and group_no is null";
 					$data=mysqli_query($connect,$query); 
 					while($row=mysqli_fetch_array($data)){?>
 					<option value="<?php echo $row['user_id'] ?>"><?php echo $row['user_name']; ?></option>
@@ -109,7 +109,7 @@ if(isset($_POST['submit'])){
 		<?php if($grade!=$i){ 
 					$i++; ?>
 				<select name="grade2" class="form-control" placeholder="Grade B">
-					<?php $query="select user_id,user_name from presento_user where grade=2";
+					<?php $query="select user_id,user_name from presento_user where grade=2 and group_no is null";
 					$data=mysqli_query($connect,$query); 
 					while($row=mysqli_fetch_array($data)){?>
 					<option value="<?php echo $row['user_id'] ?>"><?php echo $row['user_name']; ?></option>
@@ -129,7 +129,7 @@ if(isset($_POST['submit'])){
 		<?php if($grade!=$i){ 
 					$i++; ?>
 				<select name="grade3" class="form-control" placeholder="Grade C">
-					<?php $query="select user_id,user_name from presento_user where grade=3";
+					<?php $query="select user_id,user_name from presento_user where grade=3 and group_no is null";
 					$data=mysqli_query($connect,$query); 
 					while($row=mysqli_fetch_array($data)){?>
 					<option value="<?php echo $row['user_id'] ?>"><?php echo $row['user_name']; ?></option>
@@ -149,7 +149,7 @@ if(isset($_POST['submit'])){
 		<?php if($grade!=$i){ 
 					$i++; ?>
 				<select name="grade4" class="form-control" placeholder="Grade D">
-					<?php $query="select user_id,user_name from presento_user where grade=4";
+					<?php $query="select user_id,user_name from presento_user where grade=4 and group_no is null";
 					$data=mysqli_query($connect,$query); 
 					while($row=mysqli_fetch_array($data)){ ?>
 					<option value="<?php echo $row['user_id'] ?>"><?php echo $row['user_name']; ?></option>
